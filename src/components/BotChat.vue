@@ -21,6 +21,7 @@ export default {
             default: () => {},
         },
     },
+    emits: ['callbackRequested'],
     setup(props) {
         const msg = ref(props.data);
         watch(() => props.data, () => {

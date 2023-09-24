@@ -1,15 +1,38 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <ChatList :data="data"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ChatList from '@/components/ChatList.vue'
+import { ref, onMounted } from 'vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ChatList
+  },
+  setup() {
+    const data = ref([]);
+    onMounted(()=>{
+      // Make an API request when the component is mounted
+      fetch('https://my-json-server.typicode.com/codebuds-fk/chat/chats') // Replace with your API endpoint
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((responseData) => {
+          data.value = responseData;
+          console.log(data.value);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+    });
+    return {
+      data
+    };
   }
 }
 </script>

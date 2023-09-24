@@ -13,11 +13,20 @@
 .color-flipkart-blue {
     color: #027CD5;
 }
+.color-white {
+    color: #FFFFFF;
+}
+.bg-flipkart-blue {
+    background: #027CD5;
+}
 .bg-optioned {
     background: #f5f5f5;
 }
 .cursor-pointer {
     cursor: pointer;
+}
+.text-10 {
+    font-size: 10px;
 }
 .text-12 {
     font-size: 12px;

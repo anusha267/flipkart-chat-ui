@@ -1,10 +1,10 @@
 <template>
-    <nav>
-        <span>Filter by Title/OrderID</span>
-        <input v-model="filterValue" type="text" id="inputField">
-    </nav>
     <section class="chat-list">
         <aside class="left-bar">
+            <div class="header">
+                <span class="filter-label bold">Filter by Title/OrderID</span>
+                <input class="filter-input" placeholder="Start typing to search" v-model="filterValue" type="text" id="inputField">
+            </div>
             <template v-for="chat in filteredChats" :key="chat.id">
                 <div class="cursor-pointer" @click="chatClicked(chat)">
                     <ChatListCard :selected="selectedChat?.id === chat.id" :data="chat"></ChatListCard>
@@ -12,7 +12,7 @@
             </template>
         </aside>
         <article >
-            <ChatView v-if="selectedChat" :data="selectedChat"/>
+            <ChatView v-if="selectedChat" :data="selectedChat" @messageAdded="onMessageAdded"/>
         </article>
     </section>
 </template>
@@ -50,8 +50,6 @@ export default {
         watch(() => props.data, () => {
             chats.value = props.data;
         });
-
-        // Create a computed property to filter chats based on filterValue
         const filteredChats = computed(() => {
             const filterText = filterValue.value.toLowerCase().trim();
             const filtered = chats.value.filter((chat) => {
@@ -60,9 +58,13 @@ export default {
                 return title.includes(filterText) || orderId.includes(filterText);
             });
 
-            // If no results found, return all chats
             return filtered.length > 0 ? filtered : chats.value;
         });
+
+        const onMessageAdded = (msg) => {
+            chats.value[msg.id -1]?.messageList.push(msg.msg);
+            console.log(chats.value);
+        };
 
         return {
             filterValue,
@@ -71,6 +73,7 @@ export default {
             chatClicked,
             debouncedSearch,
             filteredChats,
+            onMessageAdded,
         };
     },
 };
@@ -84,7 +87,22 @@ export default {
 }
 
 .chat-list .left-bar {
-    border: 1px solid #D4D4D4;
+    border-right: 1px solid #D4D4D4;
     width: 100%;
+    height: calc(100vh - 80px);
+    overflow: auto;
+}
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.filter-label{
+    width: fit-content;
+    font-size: 18px;
+}
+.filter-input {
+    border: none;
+    border-bottom:  2px solid #000000;
 }
 </style>

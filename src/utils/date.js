@@ -6,3 +6,19 @@ export const formatTimestampToDateString = (timestamp) => {
 
     return `${day}/${month}/${year}`;
 }
+export const timestampToTime = (timestamp) => {
+    const date = new Date(timestamp);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+  
+    // Convert hours from 24-hour format to 12-hour format
+    if (hours > 12) {
+      hours -= 12;
+    }
+  
+    // Ensure single-digit minutes are displayed with a leading zero
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  
+    return `${hours}:${formattedMinutes} ${ampm}`;
+  }
